@@ -78,7 +78,7 @@ def new_game(message):
     /12 - <i>получить задание номер 12</i>
     /help - <i>список команд и немного обо мне )</i>
     '''
-    bot.send_message(message.chat.id,start_massage+,parse_mode='HTML')
+    bot.send_message(message.chat.id,start_massage+start_massage1,parse_mode='HTML')
 
 
 @bot.message_handler(commands=['game'])
