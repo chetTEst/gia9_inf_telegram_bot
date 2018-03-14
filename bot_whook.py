@@ -34,8 +34,9 @@ def start_game(message):
     '/python - <i>язык Пайтон (Питон) для задания 9 и 10</i>\n'
     '/schoolalgorithm - <i>Язык КУМИР для задания 9 и 10</i>\n'
     '/pascal - <i>язык Pascal для задания 9 и 10</i>\n'
-    '/basic - <i>язык BASIC для задания 9 и 10</i>\n'
-    '/1 - <i>получить задание номер 1</i>\n'
+    '/basic - <i>язык BASIC для задания 9 и 10</i>\n')
+    bot.send_message(message.chat.id,start_massage,parse_mode='HTML')
+    start_massage=('/1 - <i>получить задание номер 1</i>\n'
     '/2 - <i>получить задание номер 2</i>\n'
     '/3 - <i>получить задание номер 3</i>\n'
     '/4 - <i>получить задание номер 4</i>\n'
@@ -62,8 +63,9 @@ def help_game(message):
     '/python - <i>язык Пайтон (Питон) для задания 9 и 10</i>\n'
     '/schoolalgorithm - <i>Язык КУМИР для задания 9 и 10</i>\n'
     '/pascal - <i>язык Pascal для задания 9 и 10</i>\n'
-    '/basic - <i>язык BASIC для задания 9 и 10</i>\n'
-    '/1 - <i>получить задание номер 1</i>\n'
+    '/basic - <i>язык BASIC для задания 9 и 10</i>\n')
+    bot.send_message(message.chat.id,help_massage,parse_mode='HTML')
+    help_massage=('/1 - <i>получить задание номер 1</i>\n'
     '/2 - <i>получить задание номер 2</i>\n'
     '/3 - <i>получить задание номер 3</i>\n'
     '/4 - <i>получить задание номер 4</i>\n'
