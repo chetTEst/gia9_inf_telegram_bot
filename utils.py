@@ -31,7 +31,7 @@ def count_rows():
     rowsnum9 = db.count_rows('9')
     rowsnum10 = db.count_rows('10')
     rowsnum11 = db.count_rows('11')
-    rowsnum11 = db.count_rows('12')
+    rowsnum12 = db.count_rows('12')
     with shelve.open(shelve_name) as storage:
         storage['rows_count'] =[rowsnum1,rowsnum2,rowsnum3,rowsnum4,rowsnum5,rowsnum6,rowsnum7,rowsnum8,rowsnum9,rowsnum10,rowsnum11,rowsnum12]
 
