@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-Телеграмм бот версии 0.12 для подготовки к ГИА по информатике
+Телеграмм бот версии 0.1 для подготовки к ГИА по информатике
 Бот написан учителем информатики Четверовым Алексеем Владимировичем
 Бот основан на уроках по созданию музыкальной викторины https://www.gitbook.com/book/groosha/telegram-bot-lessons/details
 Использована библиотека pyTelegramBotAPI https://github.com/eternnoir/pyTelegramBotAPI
@@ -20,6 +20,7 @@ from flask import Flask, request
 server = Flask(__name__)
 
 bot = telebot.TeleBot(config.token)
+TOKEN=config.token
 
 
 @bot.message_handler(commands=['game'])
@@ -28,7 +29,7 @@ def new_game(message):
     markup.row('/1', '/2', '/3', '/4', '/5', '/6')
     markup.row('/7', '/8', '/9', '/10', '/11', '/12')
     '''markup.row('/13', '/14', '/15', '/16', '/17', '/18')'''
-    bot.reply_to(message, "Выбери номер задания для тренировки:", reply_markup=markup)
+    bot.send_message(message.chat.id, "Выбери номер задания для тренировки:", reply_markup=markup)
 
 
 @bot.message_handler(commands=['1','2','3','4','5','6'])
@@ -44,19 +45,19 @@ def game_1_6(message):
     markup = utils.generate_markup(row[4], row[5],answer_number[1])
     if answer_number[1]=='3' or answer_number[1]=='5':
         # Отправляем вводную часть вопроса
-        bot.reply_to(message,row[2])
+        bot.send_message(message.chat.id,row[2])
         # Отправляем картинку
-        bot.send_photo(message, row[1])
+        bot.send_photo(message.chat.id, row[1])
     if answer_number[1]=='4' or answer_number[1]=='6':
         # Отправляем вводную часть вопроса с форматированием
-        bot.reply_to(message,row[2],parse_mode='HTML')
+        bot.send_message(message.chat.id,row[2],parse_mode='HTML')
         # Отправляем основную часть вопроса с форматированием
-        bot.reply_to(message, row[1],parse_mode='HTML')
+        bot.send_message(message.chat.id, row[1],parse_mode='HTML')
     # Отправляем вопрос и заменяем кдавиатуру на варианты ответа
-    bot.reply_to(message,row[3],reply_markup=markup)
+    bot.send_message(message.chat.id,row[3],reply_markup=markup)
 
     # Включаем "игровой режим"... ждем ответа от пользователя
-    utils.set_user_game(message, row[4],row[6])
+    utils.set_user_game(message.chat.id, row[4],row[6])
     # Отсоединяемся от БД
     db_worker.close()
 
@@ -72,30 +73,30 @@ def game_7_18_not_9_10(message):
     row = db_worker.select_single(random.randint(1, utils.get_rows_count(answer_number[1])),answer_number[1])
     if answer_number[1]=='7' or answer_number[1]=='11' or answer_number[1]=='12':
         # Отправляем вводную часть вопроса
-        bot.reply_to(message,row[2])
+        bot.send_message(message.chat.id,row[2])
         # Отправляем картинку
-        bot.send_photo(message, row[1])
+        bot.send_photo(message.chat.id, row[1])
     elif answer_number[1]=='8':
         # Отправляем вводную часть вопроса с форматированием
-        bot.reply_to(message,row[2],parse_mode='HTML')
+        bot.send_message(message.chat.id,row[2],parse_mode='HTML')
         # Отправляем основную часть вопроса
-        bot.reply_to(message, row[1])
+        bot.send_message(message.chat.id, row[1])
     # Отправляем вопрос
-    bot.reply_to(message,row[3])
+    bot.send_message(message.chat.id,row[3])
     # Включаем "игровой режим"... ждем ответа от пользователя
-    utils.set_user_game(message, row[4],row[5])
+    utils.set_user_game(message.chat.id, row[4],row[5])
     # Отсоединяемся от БД
     db_worker.close()
 
 @bot.message_handler(commands=['9']) #добавить 10
 def game_9(message):
-    code=utils.set_user_code_get(message)
+    code=utils.set_user_code_get(message.chat.id)
     if not code or code=='':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True,one_time_keyboard=True)
         markup.row('/sсhoolalgorithm')
         markup.row('/basic', '/pascal')
         markup.row('/python')
-        bot.reply_to(message, 'ВНИМАНИЕ! Не выбран предпочитаемый язык программирования!\nВыбери предпочитаемый язык программирования:\n * shoolAlgorithm - Алгоритмический язык (КУМИР)\n * basic - бейсик\n * pascal - Паскаль\n * Pyhon - Пайтон (Питон)', reply_markup=markup)
+        bot.send_message(message.chat.id, 'ВНИМАНИЕ! Не выбран предпочитаемый язык программирования!\nВыбери предпочитаемый язык программирования:\n * shoolAlgorithm - Алгоритмический язык (КУМИР)\n * basic - бейсик\n * pascal - Паскаль\n * Pyhon - Пайтон (Питон)', reply_markup=markup)
     else:
         #получаем сообщение пользователя
         message_namber=message.text
@@ -127,11 +128,11 @@ def game_9(message):
         result_code=result_code.replace('{k2}',str(k1+r))
         result_code=result_code.replace('{s1}',str(s1))
         # Отправляем вводную часть вопроса
-        bot.reply_to(message,row[1])
+        bot.send_message(message.chat.id,row[1])
         # Отправляем основную часть вопроса c форматированием
-        bot.reply_to(message, '<pre>'+result_code+'</pre>',parse_mode='HTML')
+        bot.send_message(message.chat.id, '<pre>'+result_code+'</pre>',parse_mode='HTML')
         # Отправляем дополнительное сообщение
-        bot.reply_to(message,'Текст программы приведён на языке программирования: '+chat_message[code])
+        bot.send_message(message.chat.id,'Текст программы приведён на языке программирования: '+chat_message[code])
         #сохраняем в переменную текст шаюблона пояснения из базы данных
         result_memorial=row[7]
         #заеняем данные в шаблоне
@@ -142,17 +143,17 @@ def game_9(message):
         result_memorial=result_memorial.replace('{r}',str(r+1))
         result_memorial=result_memorial.replace('{answer}',utils.generate_right_answer_9(row[6],s,s1,r,k1))
         # Включаем "игровой режим"... ждем ответа от пользователя
-        utils.set_user_game(message, utils.generate_right_answer_9(row[6],s,s1,r,k1),result_memorial)
+        utils.set_user_game(message.chat.id, utils.generate_right_answer_9(row[6],s,s1,r,k1),result_memorial)
 
 @bot.message_handler(commands=['10'])
 def game_10(message):
-    code=utils.set_user_code_get(message)
+    code=utils.set_user_code_get(message.chat.id)
     if not code or code=='':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True,one_time_keyboard=True)
         markup.row('/sсhoolalgorithm')
         markup.row('/basic', '/pascal')
         markup.row('/python')
-        bot.reply_to(message, 'ВНИМАНИЕ! Не выбран предпочитаемый язык программирования!\nВыбери предпочитаемый язык программирования:\n * shoolAlgorithm - Алгоритмический язык (КУМИР)\n * basic - бейсик\n * pascal - Паскаль\n * Pyhon - Пайтон (Питон)', reply_markup=markup)
+        bot.send_message(message.chat.id, 'ВНИМАНИЕ! Не выбран предпочитаемый язык программирования!\nВыбери предпочитаемый язык программирования:\n * shoolAlgorithm - Алгоритмический язык (КУМИР)\n * basic - бейсик\n * pascal - Паскаль\n * Pyhon - Пайтон (Питон)', reply_markup=markup)
     else:
         #получаем сообщение пользователя
         message_namber=message.text
@@ -182,18 +183,18 @@ def game_10(message):
             result_code=result_code.replace('{dat'+str(int(i))+'}',str(Dat[i]))
         result_code=result_code.replace('{t}',str(t))
         # Отправляем вводную часть вопроса
-        bot.reply_to(message,row[1])
+        bot.send_message(message.chat.id,row[1])
         # Отправляем основную часть вопроса c форматированием
-        bot.reply_to(message, '<pre>'+result_code+'</pre>',parse_mode='HTML')
+        bot.send_message(message.chat.id, '<pre>'+result_code+'</pre>',parse_mode='HTML')
         # Отправляем дополнительное сообщение
-        bot.reply_to(message,'Текст программы приведён на языке программирования: '+chat_message[code])
+        bot.send_message(message.chat.id,'Текст программы приведён на языке программирования: '+chat_message[code])
         #сохраняем в переменную текст шаюблона пояснения из базы данных
         result_memorial=row[7]
         #заеняем данные в шаблоне
         result_memorial=result_memorial.replace('{t}',str(t))
         result_memorial=result_memorial.replace('{answer}',utils.generate_right_answer_10(row[6],Dat,t))
         # Включаем "игровой режим"... ждем ответа от пользователя
-        utils.set_user_game(message, utils.generate_right_answer_10(row[6],Dat,t),result_memorial)
+        utils.set_user_game(message.chat.id, utils.generate_right_answer_10(row[6],Dat,t),result_memorial)
 
 
 @bot.message_handler(commands=['schoolalgorithm','basic','pascal','python'])
@@ -216,39 +217,39 @@ def game_1_18_9(message):
     elif answer_number[1]=='python':
         code='5'
         chat_message='Pyhon'
-    utils.set_user_code(message,code)
-    bot.reply_to(message,'Вы установили в качестве основного языка: '+chat_message+'\nНаберите команду /9 или /10 для получения задания.',reply_markup=keyboard_hider)
+    utils.set_user_code(message.chat.id,code)
+    bot.send_message(message.chat.id,'Вы установили в качестве основного языка: '+chat_message+'\nНаберите команду /9 или /10 для получения задания.',reply_markup=keyboard_hider)
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def check_answer(message):
     #убрать клавиатуру 
     keyboard_hider = types.ReplyKeyboardRemove()
     # Если функция возвращает None -> Человек не в игре
-    answer = utils.get_answer_for_user(message)
+    answer = utils.get_answer_for_user(message.chat.id)
     # Как Вы помните, answer может быть либо текст, либо None
     # Если None:
     if not answer:
-        bot.reply_to(message, 'Чтобы начать подготовку, набери команду /game')
+        bot.send_message(message.chat.id, 'Чтобы начать подготовку, набери команду /game')
     elif answer=='':
-        bot.reply_to(message, 'Чтобы продолжить подготовку, набери команду /game')
+        bot.send_message(message.chat.id, 'Чтобы продолжить подготовку, набери команду /game')
     else:
         # Уберем клавиатуру с вариантами ответа.
         #keyboard_hider = types.ReplyKeyboardRemove() reply_markup=keyboard_hider
         # Если ответ правильный/неправильный
         if message.text == answer:
-            bot.reply_to(message, 'Верно!')
+            bot.send_message(message.chat.id, 'Верно!')
             answer_game_1=1
             answer_game_0=0
         else:
-            bot.reply_to(message, 'Увы, Вы ошиблись!')
-            bot.reply_to(message, 'Пояснения:\n'+utils.finish_user_game_memorial(message))
+            bot.send_message(message.chat.id, 'Увы, Вы ошиблись!')
+            bot.send_message(message.chat.id, 'Пояснения:\n'+utils.finish_user_game_memorial(message.chat.id))
             answer_game_1=0
             answer_game_0=1
         # Сохраняем счет пользователя в базу данных (игра закончена)
-        utils.finish_user_game(message,answer_game_1,answer_game_0)
-        bot.reply_to(message, utils.finish_user_game_count(message),reply_markup=keyboard_hider)
+        utils.finish_user_game(message.chat.id,answer_game_1,answer_game_0)
+        bot.send_message(message.chat.id, utils.finish_user_game_count(message.chat.id),reply_markup=keyboard_hider)
 
-@server.route('/' + config.token, methods=['POST'])
+@server.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
@@ -257,7 +258,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://ancient-woodland-35882.herokuapp.com/' + config.token)
+    bot.set_webhook(url='https://your_heroku_project.com/' + TOKEN)
     return "!", 200
 
 
