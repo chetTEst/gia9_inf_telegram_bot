@@ -6,7 +6,7 @@
 Использована библиотека pyTelegramBotAPI https://github.com/eternnoir/pyTelegramBotAPI
 В качестве источника данных для заданий используется база данных SQLLight
 Информация о пользователях сохраняется в формете ключ-запись в отдельном файле
-Этот файл функций работы с базами данных и форматикрования ответов
+Этот файл функций работы с базами данных и форматирования ответов
 '''
 import shelve
 from telebot import types
@@ -26,8 +26,12 @@ def count_rows():
     rowsnum4 = db.count_rows('4')
     rowsnum5 = db.count_rows('5')
     rowsnum6 = db.count_rows('6')
+    rowsnum7 = db.count_rows('7')
+    rowsnum8 = db.count_rows('8')
+    rowsnum9 = db.count_rows('9')
+    rowsnum10 = db.count_rows('10')
     with shelve.open(shelve_name) as storage:
-        storage['rows_count'] =[rowsnum1,rowsnum2,rowsnum3,rowsnum4,rowsnum5,rowsnum6]
+        storage['rows_count'] =[rowsnum1,rowsnum2,rowsnum3,rowsnum4,rowsnum5,rowsnum6,rowsnum7,rowsnum8,rowsnum9,rowsnum10]
 
 
 def get_rows_count(table_number):
@@ -51,7 +55,7 @@ def set_user_game(chat_id, estimated_answer,memorial):
     		data_user=storage[str(chat_id)]
     		storage[str(chat_id)]=[estimated_answer,data_user[1],data_user[2],data_user[3],memorial]
     	except KeyError:
-    		storage[str(chat_id)] = [estimated_answer,'0','0','pascal',memorial]
+    		storage[str(chat_id)] = [estimated_answer,'0','0','',memorial]
 
 def set_user_code_get(chat_id):
     """
@@ -147,3 +151,47 @@ def generate_markup(right_answer, wrong_answers,answer_number):
         markup.row(list_items[0],list_items[1])
         markup.row(list_items[2],list_items[3])
     return markup
+
+# функция вычисления правильного ответа для 9-го задания.
+def generate_right_answer_9(right_answer,s,s1,r,k1):
+    if right_answer=='add':
+        return str(int(s+s1*(r+1)))
+    if right_answer=='mult':
+        return str(int(s*pow(s1,(r+1))))
+    if right_answer=='aprog':
+        for k in range(k1, k1+r+1):
+            s = s+s1*k
+        return str(int(s))
+    if right_answer=='sub':
+        return str(int(s-s1*(r+1)))
+
+#функция вычисления правильного ответа для 9-го задания.
+def generate_right_answer_10(right_answer,list1,k):
+    if right_answer=='count':
+        return str(list1.count(k))
+    if right_answer=='min':
+        return str(min(list1))
+    if right_answer=='max':
+        return str(max(list1))
+    if right_answer=='minindex':
+        return str(list1.index(min(list1)))
+    if right_answer=='maxindex':
+        return str(list1.index(max(list1)))
+    if right_answer=='more':
+        m=0
+        for j in range(10):
+            if list1[j]>k:
+                m=m+1
+        return str(int(m))
+    if right_answer=='less':
+        m=0
+        for j in range(10):
+            if list1[j]>k:
+                m=m+1
+        return str(int(m))
+    if right_answer=='summ':
+        m=0
+        for j in range(10):
+            if list1[j]>k:
+                m=m+Dat[j]
+        return str(int(m))

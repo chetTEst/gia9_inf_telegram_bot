@@ -17,9 +17,9 @@ bot = telebot.TeleBot(config.token)
 
 @bot.message_handler(commands=['test'])
 def find_file_ids(message):
-    for file in os.listdir('pics/z7/'):
+    for file in os.listdir('pics/z12/'):
         if file.split('.')[-1] == 'png':
-            f = open('pics/z7/'+file, 'rb')
+            f = open('pics/z12/'+file, 'rb')
             msg = bot.send_photo(message.chat.id, f, None)
             #f.close()
             # А теперь отправим вслед за файлом его file_id
