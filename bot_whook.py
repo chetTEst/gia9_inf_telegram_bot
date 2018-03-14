@@ -30,7 +30,7 @@ def start_game(message):
     start_massage=('Приветсвую дорогой друг!\n'
     'Если ты желаешь подготовится к ГИА по информатике, то ты пришел по адресу.\n')
     bot.send_message(message.chat.id,start_massage)
-    bot.send_message(message.chat.id,'<b>Вот какие команды я знаю<b/>\n',parse_mode='HTML')
+    bot.send_message(message.chat.id,'<b>Вот какие команды я знаю<b/>',parse_mode='HTML')
     start_massage=('/game - Начать подготовку к экзамену и выбрать номер задания\n'
     '/python - язык Пайтон (Питон) для задания 9 и 10\n'
     '/schoolalgorithm - Язык КУМИР для задания 9 и 10\n'
@@ -53,13 +53,13 @@ def start_game(message):
 
 @bot.message_handler(commands=['help'])
 def help_game(message):
-    help_massage=('Бот @gia9_inf_bot версии'+config.ver+'\n'
+    help_massage=('Бот @gia9_inf_bot версии '+config.ver+'\n'
     'Предназначен для тренировки навыков умственного труда и алгоритмов решения заданий ГИА по информатике.\n'
     'Отправь команду с номером задания и приступай к решению.\n'
     'Готовый ответ выбираешь из предложенных вариантов или вводишь с клавиатуры.\n'
     'В этой версии я умею подсчитывать кол-во правильных и не правильных ответов, в будещем меня научат анализировать твою работу и давать советы по достижению наилучших результатов в экзамене.\n')
     bot.send_message(message.chat.id,help_massage)
-    bot.send_message(message.chat.id,'<b>Вот какие команды я знаю<b/>\n',parse_mode='HTML')
+    bot.send_message(message.chat.id,'<b>Вот какие команды я знаю<b/>',parse_mode='HTML')
     help_massage=('/game - Начать подготовку к экзамену и выбрать номер задания\n'
     '/python - язык Пайтон (Питон) для задания 9 и 10\n'
     '/schoolalgorithm - Язык КУМИР для задания 9 и 10\n'
