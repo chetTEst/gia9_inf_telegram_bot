@@ -22,6 +22,8 @@ server = Flask(__name__)
 bot = telebot.TeleBot(config.token)
 TOKEN=config.token
 
+utils.count_rows()
+random.seed()
 
 @bot.message_handler(commands=['game'])
 def new_game(message):
@@ -258,7 +260,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://your_heroku_project.com/' + TOKEN)
+    bot.set_webhook(url='https://ancient-woodland-35882.herokuapp.com/' + TOKEN)
     return "!", 200
 
 
